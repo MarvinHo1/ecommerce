@@ -29,5 +29,9 @@ app.get('/', (request, response) => {
 // app.put('/users/:id', db.updateUser)
 // app.delete('/users/:id', db.deleteUser)
 
+app.post('/login', (res, req) => {
+  console.log(res.body)
+})
+
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
