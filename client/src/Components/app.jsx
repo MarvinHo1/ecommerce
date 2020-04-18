@@ -1,5 +1,7 @@
 import React from 'react';
 import Login from './login/login.jsx'
+import UserRegister from './login/register.jsx'
+
 
 class Ecommerce extends React.Component {
   constructor(props) {
@@ -10,6 +12,7 @@ class Ecommerce extends React.Component {
     return (
       <div>Welp World is Shit
       <Login />
+      <UserRegister />
       </div>
     )
   }
