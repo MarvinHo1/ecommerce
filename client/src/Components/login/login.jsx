@@ -8,13 +8,12 @@ const Login = () => {
     console.log(values);
     console.log(values.email)
     console.log(values.password)
-    
     axios.post('/login', {
       email: `${values.email}`,
       password: `${values.password}`
     })
     .then(function (response) {
-      console.log(response);
+      console.log('please',response);
     })
     .catch(function (error) {
       console.log(error);

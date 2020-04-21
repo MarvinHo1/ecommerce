@@ -12,15 +12,24 @@ const bcrypt = require('bcrypt')
 const bodyParser = require('body-parser')
 const path = require('path');
 const passport = require('passport')
-const flash = require('express-flash')
+const flash = require('connect-flash');
 const session = require('express-session')
 
+app.use(flash());
 const initializePassport = require('./passport.js')
-initializePassport( 
-  passport, 
-  email => users.find(user => user.email === email),
-  id => users.find(user => user.id === id),
-)
+// console.log(initializePassport)
+console.log(email => users.find(user => user.email === email))
+
+app.use((req, res, next) => {
+  initializePassport( 
+    passport, 
+    email => users.find(user => user.email === email),
+    id => users.find(user => user.id === id),
+    req,
+    res
+  )
+  next()
+})
 
 //proxy database for now
 const users = [];
@@ -67,7 +76,7 @@ app.post('/login', passport.authenticate('local', {
 app.post('/register', async (req, res) => {
   try {
     const hashedPass = await bcrypt.hash(req.body.password, 10);
-    console.log(hashedPass)
+    // console.log(hashedPass)
     users.push({
       //id will be provided to
       id: Date.now().toString(),
