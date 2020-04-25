@@ -22,6 +22,7 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      {console.log(window.flash)}
       <label>Email</label>
       <input
         name="email"

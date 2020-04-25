@@ -15,10 +15,9 @@ const passport = require('passport')
 const flash = require('connect-flash');
 const session = require('express-session')
 
-app.use(flash());
 const initializePassport = require('./passport.js')
 // console.log(initializePassport)
-console.log(email => users.find(user => user.email === email))
+// console.log(email => users.find(user => user.email === email))
 
 app.use((req, res, next) => {
   initializePassport( 
@@ -54,9 +53,9 @@ app.use(morgan('dev'));
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-app.get('/', checkAuthenticated, (req, res) => {
-  response.json({ info: 'Node.js, Express, and Postgres API' })
-})
+// app.get('/', checkAuthenticated, (req, res) => {
+//   response.json({ info: 'Node.js, Express, and Postgres API' })
+// })
 
 // app.get('/users', db.getUsers)
 // app.get('/users/:id', db.getUserById)
@@ -66,12 +65,22 @@ app.get('/', checkAuthenticated, (req, res) => {
 
 app.post('/login', passport.authenticate('local', {
   // on success send us back to the homepage
-  successRedirect: '/',
+  successRedirect: '/successjson',
   // on fail send us back to out login page
-  failureRedirect: '/login',
+  failureRedirect: '/failurejson',
   // allow messages to be send back to view layer
   failureFlash: true
 }))
+
+app.get('/successjson', function(req, res) {
+  res.redirect('/')
+  // console.log('redirect successful')
+  // res.send(req.session.flash.message[0]);
+});
+
+app.get('/failurejson', function(req, res) {
+  res.send(req.session.flash.message[0]);
+});
 
 app.post('/register', async (req, res) => {
   try {
