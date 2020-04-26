@@ -22,6 +22,7 @@ const Login = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <h1>Login</h1>
       {console.log(window.flash)}
       <label>Email</label>
       <input
@@ -48,4 +49,4 @@ const Login = () => {
   );
 };
 
-export default Login
+export default Login;

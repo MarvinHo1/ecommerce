@@ -53,9 +53,15 @@ app.use(morgan('dev'));
 
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
+
 // app.get('/', checkAuthenticated, (req, res) => {
 //   response.json({ info: 'Node.js, Express, and Postgres API' })
 // })
+
+app.get('/', (req, res) => {
+  response.json({ info: 'Node.js, Express, and Postgres API' })
+})
+
 
 // app.get('/users', db.getUsers)
 // app.get('/users/:id', db.getUserById)
@@ -99,12 +105,18 @@ app.post('/register', async (req, res) => {
   }
 })
 
+app.get('*', function(req, res) {
+  res.sendFile('index.html', {root: path.join(__dirname, '../client/dist')});
+});
+
 //use axios axios.delete onclick to logout of session
+//need to make logout button...
 app.delete('/logout', (req, res) => {
   req.logOut()
   req.redirect('/login')
 })
 
+//only people who are authenticated get to see this
 function checkAuthenticated(req, res, next) {
   if(req.isAuthenticated()) {
     next()
@@ -112,6 +124,7 @@ function checkAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
+//only people who are not authentacated
 function checkNotAuthenticated(req, res, next) {
   if(req.isAuthenticated()) {
     return res.redirect('/')

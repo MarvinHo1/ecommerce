@@ -23,6 +23,7 @@ const UserRegister = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
+      <h1>Register</h1>
       <label>Email</label>
       <input
         name="email"
