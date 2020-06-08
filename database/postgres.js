@@ -6,12 +6,15 @@ const pool = new Pool({
   password: 'password',
 })
 
-const getUsers = (request, response) => {
+const getUsers = (req, res) => {
+  console.log(res)
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
-    response.status(200).json(results.rows)
+    console.log(results.rows)
+    return results.rows
+    // response.status(200).json(results.rows)
   })
 }
 
@@ -26,14 +29,16 @@ const getUserById = (request, response) => {
   })
 }
 
-const createUser = (request, response) => {
+const createUser = (request, response, hashedPass) => {
   const { name, email } = request.body
+  console.log(hashedPass)
 
-  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [name, email], (error, results) => {
+  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [email, hashedPass], (error, results) => {
     if (error) {
       throw error
     }
-    response.status(201).send(`User added with ID: ${result.insertId}`)
+    response.status(201)
+    // response.status(201).send(`User added with ID: ${result.insertId}`)
   })
 }
 

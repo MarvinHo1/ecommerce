@@ -2,7 +2,6 @@ if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config()
 }
 
-
 const express = require('express')
 const app = express()
 const port = 3000
@@ -23,6 +22,7 @@ app.use((req, res, next) => {
   initializePassport( 
     passport, 
     email => users.find(user => user.email === email),
+    // db.getUsers(req, res),
     id => users.find(user => user.id === id),
     req,
     res
@@ -62,7 +62,7 @@ app.get('/', (req, res) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-
+// console.log(db.getUsers)
 // app.get('/users', db.getUsers)
 // app.get('/users/:id', db.getUserById)
 // app.post('/users', db.createUser)
@@ -85,19 +85,23 @@ app.get('/successjson', function(req, res) {
 });
 
 app.get('/failurejson', function(req, res) {
+  // console.log('fail')
+  // return res.redirect('/register')
   res.send(req.session.flash.message[0]);
 });
 
 app.post('/register', async (req, res) => {
   try {
     const hashedPass = await bcrypt.hash(req.body.password, 10);
+    db.createUser(req,res,hashedPass)
     // console.log(hashedPass)
-    users.push({
-      //id will be provided to
-      id: Date.now().toString(),
-      email: req.body.email,
-      password: hashedPass
-    })
+    // users.push({
+    //   //id will be provided to
+    //   id: Date.now().toString(),
+    //   email: req.body.email,
+    //   password: hashedPass
+    // })
+
     res.sendStatus(200);
   } catch (err) {
     console.log(err)
@@ -105,7 +109,10 @@ app.post('/register', async (req, res) => {
   }
 })
 
-app.get('*', function(req, res) {
+
+//code used for react-router to handle all routes and not the express server.
+//function of this code is to redirect back to out index.html(root)
+app.get('*', (req, res) => {
   res.sendFile('index.html', {root: path.join(__dirname, '../client/dist')});
 });
 
@@ -124,7 +131,7 @@ function checkAuthenticated(req, res, next) {
   res.redirect('/login')
 }
 
-//only people who are not authentacated
+//only people who are already authentacated
 function checkNotAuthenticated(req, res, next) {
   if(req.isAuthenticated()) {
     return res.redirect('/')
