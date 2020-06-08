@@ -101,8 +101,7 @@ app.post('/register', async (req, res) => {
     //   email: req.body.email,
     //   password: hashedPass
     // })
-
-    res.sendStatus(200);
+    // res.sendStatus(200);
   } catch (err) {
     console.log(err)
     res.sendStatus(404);

@@ -16,6 +16,11 @@ const UserRegister = () => {
     })
     .then(function (response) {
       console.log(response);
+      if (response.data === 'User already registered') {
+        alert(response.data)
+      } else {
+        window.location.replace("http://localhost:3000/login");
+      }
     })
     .catch(function (error) {
       console.log(error);

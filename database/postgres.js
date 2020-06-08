@@ -7,14 +7,14 @@ const pool = new Pool({
 })
 
 const getUsers = (req, res) => {
-  console.log(res)
+  // console.log(res)
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
     console.log(results.rows)
-    return results.rows
-    // response.status(200).json(results.rows)
+    // return results.rows
+    res.status(200).json(results.rows)
   })
 }
 
@@ -29,17 +29,27 @@ const getUserById = (request, response) => {
   })
 }
 
-const createUser = (request, response, hashedPass) => {
-  console.log(request.body)
+const createUser = (request, res, hashedPass) => {
+  // console.log(request.body)
   const { name, email } = request.body
-  console.log(hashedPass)
-
-  pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name,email,hashedPass], (error, results) => {
+  // console.log(hashedPass)
+  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
     if (error) {
       throw error
     }
-    response.status(201)
-    // response.status(201).send(`User added with ID: ${result.insertId}`)
+    results.rows.find(users => {
+      if (users.email === email ) {
+        console.log('i Made it here')
+        return res.send('User already registered')
+      }
+    })
+    pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name,email,hashedPass], (error, results) => {
+      if (error) {
+        throw error
+      }
+      console.log('who am I Success')
+      return res.send('User has been registered')
+    })
   })
 }
 
