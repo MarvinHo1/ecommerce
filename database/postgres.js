@@ -30,10 +30,11 @@ const getUserById = (request, response) => {
 }
 
 const createUser = (request, response, hashedPass) => {
+  console.log(request.body)
   const { name, email } = request.body
   console.log(hashedPass)
 
-  pool.query('INSERT INTO users (name, email) VALUES ($1, $2)', [email, hashedPass], (error, results) => {
+  pool.query('INSERT INTO users (name, email, password) VALUES ($1, $2, $3)', [name,email,hashedPass], (error, results) => {
     if (error) {
       throw error
     }

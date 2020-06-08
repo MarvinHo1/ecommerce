@@ -5,11 +5,12 @@ import axios from "axios";
 const UserRegister = () => {
   const { handleSubmit, register, errors } = useForm();
   const onSubmit = values => {
-    console.log(values);
-    console.log(values.email)
-    console.log(values.password)
+    console.log(values.name, 'lol');
+    // console.log(values.email)
+    // console.log(values.password)
     
     axios.post('/register', {
+      name: `${values.name}`,
       email: `${values.email}`,
       password: `${values.password}`
     })
@@ -24,6 +25,13 @@ const UserRegister = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h1>Register</h1>
+      <label>Name</label>
+      <input
+        name="name"
+        ref={register({
+          required: 'Required',
+        })}
+      />
       <label>Email</label>
       <input
         name="email"
